@@ -10,9 +10,10 @@
 - Letter options
 - Words
 - Start page
-- If the guesses word is a real word but is not in the crossword then add it to bonus
-- If the guessed word is not a real word display show a error
+- If the guessed word is a real word but is not in the crossword then add it to bonus
+- If the guessed word is not a real word display a error
 - Reached the end page
+- Swiping mechanics(to connect the letters in letter wheel)
 
 ## Nice To Have
 
@@ -21,4 +22,3 @@
 - Can buy hints using coins collected
 - Score
 - Background
-- A timer

@@ -1,6 +1,6 @@
-// Project Title
-// Your Name
-// Date
+// Crossword wordscape
+// Krishitha Saravanakumar
+// October 18, 2025
 //
 // Extra for Experts:
 // - describe what you did to take this project "above and beyond"
@@ -12,5 +12,4 @@ function setup() {
 
 function draw() {
   background(220);
-  circle(mouseX, mouseY, 100);
 }
