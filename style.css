@@ -1,6 +1,12 @@
-html, body {
+html{
   margin: 0;
   padding: 0;
+}
+
+body{
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%);
 }
 
 canvas {
