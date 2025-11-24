@@ -10,8 +10,8 @@
 - Letter options
 - Words
 - Start page
-- If the guessed word is a real word but is not in the crossword then add it to bonus
-- If the guessed word is not a real word display a error
+- Background
+- Sound effects (right or wrong)
 - Reached the end page
 - Swiping mechanics(to connect the letters in letter wheel)
 
@@ -21,4 +21,5 @@
 - Collectable coins
 - Can buy hints using coins collected
 - Score
-- Background
+- If the guessed word is a real word but is not in the crossword then add it to bonus
+- If the guessed word is not a real word display a error

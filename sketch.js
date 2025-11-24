@@ -9,12 +9,38 @@ let startPage;
 let homePage;
 let gamePage;
 
+let start = true;
+
 let score = 0;
 
 function preload(){
   startPage = loadImage("wordscape_start.png");
   homePage = loadImage("home_page.jpg");
   gamePage = loadImage("game_page.jpg");
+}
+
+class Shapes{
+  constructor(x, y, color){
+    this.x = x;
+    this.y = y;
+    this.color = color;
+  }
+
+  display(){
+    fill(this.color);
+  }
+}
+
+class Circle extends Shapes{
+  constructor(x, y, color, radius){
+    super(x, y, color);
+    this.radius = radius * 2;
+  }
+
+  display(){
+    super.display();
+    circle(this.x, this.y, this.radius);
+  }
 }
 
 function setup() {
@@ -31,8 +57,10 @@ function mousePressed(){
     switchPage();
   }
 
-  if(mouseX <= width/2 + 75 && mouseX >= width/2 - 75 && mouseY <= height - 275 && mouseY >= height - 325){
-    puzzle();
+  if(start === false){
+    if(mouseX <= width/2 + 75 && mouseX >= width/2 - 75 && mouseY <= height - 275 && mouseY >= height - 325){
+      puzzle();
+    }
   }
 }
 
@@ -58,7 +86,7 @@ function switchPage(){
   textSize(20);
   text("BRILLIANCE", width/2, height/3 + 50);
 
-  
+    
   stroke("black");
   rectMode(CENTER);
   noFill();
@@ -68,9 +96,15 @@ function switchPage(){
   textAlign(CENTER, CENTER);
   textSize(30);
   text("PLAY", width/2, height - height/3);
+
+  start = false;
 }
 
 function puzzle(){
   background("white");
   image(gamePage, 150, 0, 600, height);
+
+  fill(255, 255, 255, 200);
+  noStroke();
+  circle(width/2, height - height/4, 400);
 }
