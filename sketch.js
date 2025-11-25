@@ -9,7 +9,7 @@ let startPage;
 let homePage;
 let gamePage;
 
-let start = true;
+let start = false;
 
 let score = 0;
 
@@ -53,26 +53,22 @@ function draw() {
 }
 
 function mousePressed(){
-  if(mouseX <= 750 && mouseX >= 150 && mouseY >= 0 && mouseY <= height){
-    switchPage();
+  if(start === false){
+    if(mouseX <= 750 && mouseX >= 150 && mouseY >= 0 && mouseY <= height){
+      switchPage();
+    }
   }
 
-  if(start === false){
+  if(start === true){
     if(mouseX <= width/2 + 75 && mouseX >= width/2 - 75 && mouseY <= height - 275 && mouseY >= height - 325){
       puzzle();
     }
   }
 }
 
-// function keyPressed(){
-//   if(key === " "){
-//     image(startPage, 0, 0, width, height);
-//   }
-// }
-
 function switchPage(){
-  background("white");
-  image(homePage, 150, 0, 600, height);
+  createCanvas(600, 900);
+  image(homePage, 0, 0, 600, height);
 
   noStroke();
   fill("orange");
@@ -97,12 +93,11 @@ function switchPage(){
   textSize(30);
   text("PLAY", width/2, height - height/3);
 
-  start = false;
+  start = true;
 }
 
 function puzzle(){
-  background("white");
-  image(gamePage, 150, 0, 600, height);
+  image(gamePage, 0, 0, 600, height);
 
   fill(255, 255, 255, 200);
   noStroke();
