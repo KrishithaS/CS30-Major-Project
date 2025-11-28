@@ -11,6 +11,8 @@ let gamePage;
 
 let start = false;
 
+let gridSize = 20;
+
 let score = 0;
 
 function preload(){
@@ -102,4 +104,13 @@ function puzzle(){
   fill(255, 255, 255, 200);
   noStroke();
   circle(width/2, height - height/4, 400);
+
+}
+
+function generateRandomGrid(){
+  for(let y = 0; y < width; y + gridSize){
+    for(let x = 0; x < 400; x + gridSize){
+      square(x * gridSize, y * gridSize, gridSize);
+    }
+  }
 }
