@@ -11,7 +11,7 @@ let gamePage;
 
 let start = false;
 
-let gridSize = 20;
+let gridSize = 50;
 let newBlock = [];
 
 let score = 0;
@@ -106,28 +106,38 @@ function puzzle(){
   noStroke();
   circle(width/2, height - height/4, 400);
   letterInWord();
+  generateGrid();
 }
 
 function generateGrid(){
-  for(let x = 0; x < width; x += gridSize){
-    for(let y = 0; y < height/2; y += gridSize){
-      generateSquares(x, y);
+  let counter = 0;
+  for(let block of newBlock){
+    counter ++;
+  }
+
+  for(let x = 50; x < counter * gridSize; x += gridSize){
+    for(let y = 50; y < counter * gridSize; y += gridSize){
+      // generateSquares(x, y);
+      stroke(0);
+      square(x, y, gridSize);
     }
   }
 }
 
-function generateSquares(x, y){
-  for(let block of newBlock){
-    square(x, y, gridSize);
-  }
-}
+// function generateSquares(x, y){
+//   for(let block of newBlock){
+//     stroke(0);
+//     square(x, y, gridSize);
+//   }
+// }
 
 function letterInWord(){
-  let words = ["cat"];
-  let counter = 0;
+  let words = ["cat", "bat"];
   for(let word of words){
+    // newBlock.push([]);
     for(let letter of word){
-      newBlock.push(1);
+      newBlock.push(letter);
     }
   }
+  return newBlock;
 }
