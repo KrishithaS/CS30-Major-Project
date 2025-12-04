@@ -64,7 +64,7 @@ function mousePressed(){
 
   if(start === true){
     if(mouseX <= width/2 + 75 && mouseX >= width/2 - 75 && mouseY <= height - 275 && mouseY >= height - 325){
-      puzzle();
+      level1();
     }
   }
 }
@@ -99,30 +99,36 @@ function switchPage(){
   start = true;
 }
 
-function puzzle(){
+function level1(){
   image(gamePage, 0, 0, 600, height);
 
   fill(255, 255, 255, 200);
   noStroke();
   circle(width/2, height - height/4, 400);
-  letterInWord();
-  generateGrid();
+  // letterInWord();
+  // generateGrid();
+
+
+  fill(0);
+  circle(width/2, (height - height/4) * cos(0) * sin(1), 20);
+  fill(0);
+  circle(width/2 * cos(1/2) * sin(-sqrt(3)/2), (height - height/4) * cos(1/2) * sin(-sqrt(3)/2), 20);
 }
 
-function generateGrid(){
-  let counter = 0;
-  for(let block of newBlock){
-    counter ++;
-  }
+// function generateGrid(){
+//   let counter = 0;
+//   for(let block of newBlock){
+//     counter ++;
+//   }
 
-  for(let x = 50; x < counter * gridSize; x += gridSize){
-    for(let y = 50; y < counter * gridSize; y += gridSize){
-      // generateSquares(x, y);
-      stroke(0);
-      square(x, y, gridSize);
-    }
-  }
-}
+//   for(let x = 50; x < counter * gridSize; x += gridSize){
+//     for(let y = 50; y < counter * gridSize; y += gridSize){
+//       // generateSquares(x, y);
+//       stroke(0);
+//       square(x, y, gridSize);
+//     }
+//   }
+// }
 
 // function generateSquares(x, y){
 //   for(let block of newBlock){
@@ -131,13 +137,13 @@ function generateGrid(){
 //   }
 // }
 
-function letterInWord(){
-  let words = ["cat", "bat"];
-  for(let word of words){
-    // newBlock.push([]);
-    for(let letter of word){
-      newBlock.push(letter);
-    }
-  }
-  return newBlock;
-}
+// function letterInWord(){
+//   let words = ["cat", "bat"];
+//   for(let word of words){
+//     // newBlock.push([]);
+//     for(let letter of word){
+//       newBlock.push(letter);
+//     }
+//   }
+//   return newBlock;
+// }
