@@ -9,6 +9,8 @@ let startPage;
 let homePage;
 let gamePage;
 
+let x = 
+
 let start = false;
 
 let gridSize = 50;
@@ -110,9 +112,11 @@ function level1(){
 
 
   fill(0);
-  circle(width/2, (height - height/4) * cos(0) * sin(1), 20);
+  circle(width/2, (height - height/4) * sin(1), 20);
   fill(0);
-  circle(width/2 * cos(1/2) * sin(-sqrt(3)/2), (height - height/4) * cos(1/2) * sin(-sqrt(3)/2), 20);
+  circle(width/2, (height - height/4) * sin(2), 20);
+  fill(0);
+  circle(width/2 * cos(1/2), (height - height/4) * sin(1/sqrt(3)), 20);
 }
 
 // function generateGrid(){
