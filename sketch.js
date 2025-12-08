@@ -9,9 +9,8 @@ let startPage;
 let homePage;
 let gamePage;
 
-let x = 
-
 let start = false;
+let letters;
 
 let gridSize = 50;
 let newBlock = [];
@@ -51,6 +50,7 @@ class Circle extends Shapes{
 function setup() {
   createCanvas(900, 900);
   image(startPage, 0, 0, width, height);
+  angleMode(DEGREES);
 }
 
 function draw() {
@@ -102,52 +102,59 @@ function switchPage(){
 }
 
 function level1(){
+  let level1Array =[];
+
   image(gamePage, 0, 0, 600, height);
 
   fill(255, 255, 255, 200);
   noStroke();
-  circle(width/2, height - height/4, 400);
+  translate(width/2, height - height/4);
+  circle(0, 0, 400);
+
+  for(let angle = 0; angle < 360; angle += 360 / 4){
+    fill(0);
+    circle(cos(angle) * 150, sin(angle) * 150, 20);
+  }
+
+  letters = ["A", "L", "P", "Y"];
+
+  for(let letter = 0; letter < letters; letter ++){
+    text(letter, cos(angle) * 150, sin(angle) * 150);
+  }
+
+  noFill();
   // letterInWord();
   // generateGrid();
-
-
-  fill(0);
-  circle(width/2, (height - height/4) * sin(1), 20);
-  fill(0);
-  circle(width/2, (height - height/4) * sin(2), 20);
-  fill(0);
-  circle(width/2 * cos(1/2), (height - height/4) * sin(1/sqrt(3)), 20);
 }
 
-// function generateGrid(){
-//   let counter = 0;
-//   for(let block of newBlock){
-//     counter ++;
-//   }
+function generateGrid(){
+  let counter = 0;
+  for(let block of newBlock){
+    counter ++;
+  }
 
-//   for(let x = 50; x < counter * gridSize; x += gridSize){
-//     for(let y = 50; y < counter * gridSize; y += gridSize){
-//       // generateSquares(x, y);
-//       stroke(0);
-//       square(x, y, gridSize);
-//     }
-//   }
-// }
+  for(let x = 50; x < counter * gridSize; x += gridSize){
+    for(let y = 50; y < counter * gridSize; y += gridSize){
+      // generateSquares(x, y);
+      stroke(0);
+      square(x, y, gridSize);
+    }
+  }
+}
 
-// function generateSquares(x, y){
-//   for(let block of newBlock){
-//     stroke(0);
-//     square(x, y, gridSize);
-//   }
-// }
+function generateSquares(x, y){
+  for(let block of newBlock){
+    stroke(0);
+    square(x, y, gridSize);
+  }
+}
 
-// function letterInWord(){
-//   let words = ["cat", "bat"];
-//   for(let word of words){
-//     // newBlock.push([]);
-//     for(let letter of word){
-//       newBlock.push(letter);
-//     }
-//   }
-//   return newBlock;
-// }
+function letterInWord(){
+  for(let letter of letters){
+    newBlock.push([]);
+    // for(let letter of word){
+    //   newBlock.push(letter);
+    // }
+  }
+  return newBlock;
+}
