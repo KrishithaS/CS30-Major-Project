@@ -112,14 +112,17 @@ function level1(){
   circle(0, 0, 400);
 
   for(let angle = 0; angle < 360; angle += 360 / 4){
-    fill(0);
-    circle(cos(angle) * 150, sin(angle) * 150, 20);
-  }
+    // fill(0);
+    // circle(cos(angle) * 150, sin(angle) * 150, 30);
 
-  letters = ["A", "L", "P", "Y"];
+    letters = ["A", "L", "P", "Y"];
 
-  for(let letter = 0; letter < letters; letter ++){
-    text(letter, cos(angle) * 150, sin(angle) * 150);
+    for(let letter = 0; letter < letter.length; letter ++){
+      fill(0);
+      textSize(50);
+      text(letters[letter], cos(angle) * 150, sin(angle) * 150);
+      break;
+    }
   }
 
   noFill();
