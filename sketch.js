@@ -8,6 +8,8 @@
 let startPage;
 let homePage;
 let gamePage;
+let allWords;
+let wordlist;
 
 let start = false;
 let letters;
@@ -17,10 +19,14 @@ let newBlock = [];
 
 let score = 0;
 
+let level1Array =[];
+
 function preload(){
   startPage = loadImage("wordscape_start.png");
   homePage = loadImage("home_page.jpg");
   gamePage = loadImage("game_page.jpg");
+  wordlist = "wordlist.10000.txt";
+  allWords = loadStrings(wordlist);
 }
 
 class Shapes{
@@ -96,15 +102,17 @@ function switchPage(){
   fill("white");
   textAlign(CENTER, CENTER);
   textSize(30);
-  text("PLAY", width/2, height - height/3);
+  text("LEVEL 1", width/2, height - height/3);
 
   start = true;
 }
 
 function level1(){
-  let level1Array =[];
+  letters = ["A", "L", "P", "Y"];
 
   image(gamePage, 0, 0, 600, height);
+
+  generateGrid();
 
   fill(255, 255, 255, 200);
   noStroke();
@@ -112,52 +120,48 @@ function level1(){
   circle(0, 0, 400);
 
   for(let angle = 0; angle < 360; angle += 360 / 4){
-    // fill(0);
-    // circle(cos(angle) * 150, sin(angle) * 150, 30);
-
-    letters = ["A", "L", "P", "Y"];
-
-    for(let letter = 0; letter < letter.length; letter ++){
-      fill(0);
-      textSize(50);
-      text(letters[letter], cos(angle) * 150, sin(angle) * 150);
-      break;
-    }
+    fill(0);
+    circle(cos(angle) * 150, sin(angle) * 150, 30);
   }
-
-  noFill();
-  // letterInWord();
-  // generateGrid();
+  level2();
 }
 
 function generateGrid(){
-  let counter = 0;
-  for(let block of newBlock){
-    counter ++;
-  }
-
-  for(let x = 50; x < counter * gridSize; x += gridSize){
-    for(let y = 50; y < counter * gridSize; y += gridSize){
-      // generateSquares(x, y);
-      stroke(0);
-      square(x, y, gridSize);
-    }
+  let x = 50;
+  let size = letters.length * gridSize + 50;
+  for(let y = 50; y < size; y += gridSize){
+    letterInWord(x, y);
   }
 }
 
-function generateSquares(x, y){
-  for(let block of newBlock){
-    stroke(0);
+function letterInWord(x, y){
+  for(let letter of letters){
+    fill(255, 255, 255, 50);
     square(x, y, gridSize);
   }
 }
 
-function letterInWord(){
-  for(let letter of letters){
-    newBlock.push([]);
-    // for(let letter of word){
-    //   newBlock.push(letter);
-    // }
+function guess(){
+  // answer = "play";
+  // level1Array.push(answer);
+  // answer2 = "lay";
+  // level1Array.push(answer2);
+  // answer3 = "pay";
+  // level1Array.push(answer3);
+
+  for(let words of allWords){
+    if(guessed === words){
+      // correct sound
+      // bonus word
+    }
+    else{
+      //incorrect sound
+    }
   }
-  return newBlock;
+}
+
+function level2(){
+}
+
+function mouseDragged(){
 }
