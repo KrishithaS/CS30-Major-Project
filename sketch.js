@@ -27,6 +27,7 @@ function preload(){
   gamePage = loadImage("game_page.jpg");
   wordlist = "wordlist.10000.txt";
   allWords = loadStrings(wordlist);
+  worngbuzz = loadSound("incorrect-293358.mp3");
 }
 
 class Shapes{
@@ -123,6 +124,9 @@ function level1(){
     fill(0);
     circle(cos(angle) * 150, sin(angle) * 150, 30);
   }
+
+  mouseDragged();
+
   level2();
 }
 
@@ -164,4 +168,10 @@ function level2(){
 }
 
 function mouseDragged(){
+  for(let angle = 0; angle < 360; angle += 360 / 4){
+    if(mouseX === cos(angle) * 150, mouseY === sin(angle) * 150){
+      fill(255, 255, 255);
+      circle(mouseX, mouseY, 50);
+    }
+  }
 }
