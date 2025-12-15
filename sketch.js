@@ -5,11 +5,14 @@
 // Extra for Experts:
 // - describe what you did to take this project "above and beyond"
 
+
 let startPage;
 let homePage;
 let gamePage;
 let allWords;
 let wordlist;
+let worngBuzz;
+let rightChime;
 
 let start = false;
 let letters;
@@ -20,6 +23,7 @@ let newBlock = [];
 let score = 0;
 
 let level1Array =[];
+let bonus = [];
 
 function preload(){
   startPage = loadImage("wordscape_start.png");
@@ -27,7 +31,8 @@ function preload(){
   gamePage = loadImage("game_page.jpg");
   wordlist = "wordlist.10000.txt";
   allWords = loadStrings(wordlist);
-  worngbuzz = loadSound("incorrect-293358.mp3");
+  worngBuzz = loadSound("incorrect-293358.mp3");
+  rightChime = loadSound("chime-sound-7143.mp3");
 }
 
 class Shapes{
@@ -110,6 +115,10 @@ function switchPage(){
 
 function level1(){
   letters = ["A", "L", "P", "Y"];
+  //play
+  //lay
+  //pay
+  
 
   image(gamePage, 0, 0, 600, height);
 
@@ -122,12 +131,16 @@ function level1(){
 
   for(let angle = 0; angle < 360; angle += 360 / 4){
     fill(0);
-    circle(cos(angle) * 150, sin(angle) * 150, 30);
+    // circle(cos(angle) * 150, sin(angle) * 150, 30);
   }
 
   mouseDragged();
 
   level2();
+}
+
+function level2(){
+  letters = []
 }
 
 function generateGrid(){
@@ -146,26 +159,21 @@ function letterInWord(x, y){
 }
 
 function guess(){
-  // answer = "play";
-  // level1Array.push(answer);
-  // answer2 = "lay";
-  // level1Array.push(answer2);
-  // answer3 = "pay";
-  // level1Array.push(answer3);
-
   for(let words of allWords){
     if(guessed === words){
       // correct sound
+      rightChime.play();
+
       // bonus word
     }
     else{
       //incorrect sound
+      worngBuzz.play();
     }
   }
 }
 
-function level2(){
-}
+
 
 function mouseDragged(){
   for(let angle = 0; angle < 360; angle += 360 / 4){
@@ -175,3 +183,10 @@ function mouseDragged(){
     }
   }
 }
+
+// the crossword puzzle grid
+// get swiping mechanism working
+// check if right or wrong
+// switch levels
+// score
+// letters options in play instead of circles (will creating a map work?? has to be a loop)
