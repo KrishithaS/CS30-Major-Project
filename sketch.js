@@ -67,6 +67,7 @@ function setup() {
 
 function draw() {
   // background(220);
+  updateGrid();
 }
 
 function mousePressed(){
@@ -118,7 +119,8 @@ function level1(){
   //play
   //lay
   //pay
-  
+  //lap
+  let puzzleWords = ["play", "lay", "pay", "lap"];
 
   image(gamePage, 0, 0, 600, height);
 
@@ -131,47 +133,72 @@ function level1(){
 
   for(let angle = 0; angle < 360; angle += 360 / 4){
     fill(0);
-    // circle(cos(angle) * 150, sin(angle) * 150, 30);
+    circle(cos(angle) * 150, sin(angle) * 150, 30);
   }
 
   mouseDragged();
+  checkWords();
 
-  level2();
+  // level2();
 }
 
-function level2(){
-  letters = []
-}
+// function checkWords(){
+//   let myMap = new map();
+//   n = 0;
+//   for(let word of allWords){
+//     n = n + 1;
+//     myMap.set(word, n);
+//   }
+//   for(let word of puzzleWords){
+//     if(myMap.has(word)){
+//       return word;
+//     }
+//   }
+//   console.log;
+// }
+
+// function level2(){
+//   letters = [];
+// }
 
 function generateGrid(){
-  let x = 50;
-  let size = letters.length * gridSize + 50;
-  for(let y = 50; y < size; y += gridSize){
-    letterInWord(x, y);
-  }
-}
-
-function letterInWord(x, y){
-  for(let letter of letters){
-    fill(255, 255, 255, 50);
-    square(x, y, gridSize);
-  }
-}
-
-function guess(){
-  for(let words of allWords){
-    if(guessed === words){
-      // correct sound
-      rightChime.play();
-
-      // bonus word
-    }
-    else{
-      //incorrect sound
-      worngBuzz.play();
+  for(let y = 50; y < height/2; y += gridSize){
+    // newBlock.push([]);
+    for(let x = 50; x < width; x += gridSize){
+      // newBlock[y].push(0);
+      square(x, y, gridSize);
     }
   }
 }
+
+function updateGrid(){
+  for(let y = 50; y < height/2; y += gridSize){
+    for(let x = 50; y < width; x += gridSize){
+      for(let word of puzzleWords){
+        for(let letter of word){
+          newBlock[y] = 1;
+          
+        }
+      }
+    }
+  }
+}
+
+
+// function guess(){
+//   for(let words of allWords){
+//     if(guessed === words){
+//       // correct sound
+//       rightChime.play();
+
+//       // bonus word
+//     }
+//     else{
+//       //incorrect sound
+//       worngBuzz.play();
+//     }
+//   }
+// }
 
 
 
