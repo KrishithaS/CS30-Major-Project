@@ -20,6 +20,8 @@ let letters;
 let gridSize = 50;
 let newBlock = [];
 
+let currentWord = "";
+
 let score = 0;
 
 let level1Array =[];
@@ -35,29 +37,19 @@ function preload(){
   rightChime = loadSound("chime-sound-7143.mp3");
 }
 
-class Shapes{
-  constructor(x, y, color){
-    this.x = x;
-    this.y = y;
-    this.color = color;
-  }
+// class Circle{
+//   constructor(x, y, color, radius){
+//     this.x = x;
+//     this.y = y;
+//     this.color = color;
+//     this.radius = radius;
+//   }
 
-  display(){
-    fill(this.color);
-  }
-}
-
-class Circle extends Shapes{
-  constructor(x, y, color, radius){
-    super(x, y, color);
-    this.radius = radius * 2;
-  }
-
-  display(){
-    super.display();
-    circle(this.x, this.y, this.radius);
-  }
-}
+//   display(){
+//     fill(this.color);
+//     circle(this.x, this.y, this.radius * 2);
+//   }
+// }
 
 function setup() {
   createCanvas(900, 900);
@@ -116,10 +108,6 @@ function switchPage(){
 
 function level1(){
   letters = ["A", "L", "P", "Y"];
-  //play
-  //lay
-  //pay
-  //lap
   let puzzleWords = ["play", "lay", "pay", "lap"];
 
   image(gamePage, 0, 0, 600, height);
@@ -131,11 +119,20 @@ function level1(){
   translate(width/2, height - height/4);
   circle(0, 0, 400);
 
-  for(let angle = 0; angle < 360; angle += 360 / 4){
-    fill(0);
-    circle(cos(angle) * 150, sin(angle) * 150, 30);
-  }
+  let i = 0;
 
+  for(let angle = 0; angle < 360; angle += 360 / 4){
+    let x = cos(angle) * 150;
+    let y = sin(angle) * 150;
+    
+    textAlign(CENTER, CENTER);
+    textSize(50);
+    fill(0);
+    text(letters[i], x, y);
+    i ++;
+
+    // circle(cos(angle) * 150, sin(angle) * 150, 30);
+  }
   mouseDragged();
   checkWords();
 
@@ -171,18 +168,18 @@ function generateGrid(){
   }
 }
 
-function updateGrid(){
-  for(let y = 50; y < height/2; y += gridSize){
-    for(let x = 50; y < width; x += gridSize){
-      for(let word of puzzleWords){
-        for(let letter of word){
-          newBlock[y] = 1;
+// function updateGrid(){
+//   for(let y = 50; y < height/2; y += gridSize){
+//     for(let x = 50; y < width; x += gridSize){
+//       for(let word of puzzleWords){
+//         for(let letter of word){
+//           newBlock[y] = 1;
           
-        }
-      }
-    }
-  }
-}
+//         }
+//       }
+//     }
+//   }
+// }
 
 
 // function guess(){
@@ -203,11 +200,8 @@ function updateGrid(){
 
 
 function mouseDragged(){
-  for(let angle = 0; angle < 360; angle += 360 / 4){
-    if(mouseX === cos(angle) * 150, mouseY === sin(angle) * 150){
-      fill(255, 255, 255);
-      circle(mouseX, mouseY, 50);
-    }
+  for(let i = 0; i < letters.length; i++){
+    let d = dist(mouseX, mouseY, letters[i], letters[i]);
   }
 }
 
