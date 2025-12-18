@@ -39,20 +39,6 @@ function preload(){
   rightChime = loadSound("chime-sound-7143.mp3");
 }
 
-// class Circle{
-//   constructor(x, y, color, radius){
-//     this.x = x;
-//     this.y = y;
-//     this.color = color;
-//     this.radius = radius;
-//   }
-
-//   display(){
-//     fill(this.color);
-//     circle(this.x, this.y, this.radius * 2);
-//   }
-// }
-
 function setup() {
   createCanvas(900, 900);
   image(startPage, 0, 0, width, height);
@@ -60,7 +46,6 @@ function setup() {
 }
 
 function draw() {
-  // background(220);
 }
 
 function mousePressed(){
@@ -132,8 +117,6 @@ function level1(){
     fill(0);
     text(letters[i], x, y);
     i ++;
-
-    // circle(cos(angle) * 150, sin(angle) * 150, 30);
   }
 
 
@@ -143,23 +126,19 @@ function level1(){
   // level2();
 }
 
-// function checkWords(){
-//   let map = new map();
-//   n = 0;
-//   for(let word of allWords){
-//     n = n + 1;
-//     map.set(word, n);
-//   }
-//   for(let word of puzzleWords){
-//     if(map.has(word)){
-//       return word;
-//     }
-//   }
-// }
+function checkWords(){
+  n = 0;
+  for(let word of allWords){
+    n = n + 1;
+    map.set(word, n);
+  }
+  for(let word of puzzleWords){
+    if(map.has(word)){
+      return word;
+    }
+  }
+}
 
-// function level2(){
-//   letters = [];
-// }
 
 // function generateGrid(){
 //   for(let y = 50; y < height/2; y += gridSize){
@@ -181,26 +160,27 @@ function updateGrid(){
 }
 
 
-// function guess(){
-//   for(let words of allWords){
-//     if(guessed === words){
-//       // correct sound
-//       rightChime.play();
+function guess(){
+  for(let words of allWords){
+    if(guessed === words){
+      // correct sound
+      rightChime.play();
 
-//       // bonus word
-//     }
-//     else{
-//       //incorrect sound
-//       worngBuzz.play();
-//     }
-//   }
-// }
+      // bonus word
+    }
+    else{
+      //incorrect sound
+      worngBuzz.play();
+    }
+  }
+}
 
 
 
 function mouseDragged(){
   for(let i = 0; i < letters.length; i++){
     let d = dist(mouseX, mouseY, letters[i], letters[i]);
+    currentWord += letter[i];
   }
 }
 

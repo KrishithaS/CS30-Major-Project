@@ -143,19 +143,18 @@ function level1(){
   // level2();
 }
 
-// function checkWords(){
-//   let map = new map();
-//   n = 0;
-//   for(let word of allWords){
-//     n = n + 1;
-//     map.set(word, n);
-//   }
-//   for(let word of puzzleWords){
-//     if(map.has(word)){
-//       return word;
-//     }
-//   }
-// }
+function checkWords(){
+  n = 0;
+  for(let word of allWords){
+    n = n + 1;
+    map.set(word, n);
+  }
+  for(let word of puzzleWords){
+    if(map.has(word)){
+      return word;
+    }
+  }
+}
 
 // function level2(){
 //   letters = [];
@@ -181,20 +180,20 @@ function updateGrid(){
 }
 
 
-// function guess(){
-//   for(let words of allWords){
-//     if(guessed === words){
-//       // correct sound
-//       rightChime.play();
+function guess(){
+  for(let words of allWords){
+    if(guessed === words){
+      // correct sound
+      rightChime.play();
 
-//       // bonus word
-//     }
-//     else{
-//       //incorrect sound
-//       worngBuzz.play();
-//     }
-//   }
-// }
+      // bonus word
+    }
+    else{
+      //incorrect sound
+      worngBuzz.play();
+    }
+  }
+}
 
 
 
