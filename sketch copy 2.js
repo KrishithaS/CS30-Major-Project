@@ -27,7 +27,7 @@ let score = 0;
 let level1Array =[];
 let bonus = [];
 
-let myMap = new map();
+let map = new map();
 
 function preload(){
   startPage = loadImage("wordscape_start.png");
@@ -140,14 +140,20 @@ function checkWords(){
 }
 
 
-// function generateGrid(){
-//   for(let y = 50; y < height/2; y += gridSize){
-//     newBlock.push([]);
-//     for(let x = 50; x < width; x += gridSize){
-//       if()
-//     }
-//   }
-// }
+function generateGrid(){
+  for(let y = 50; y < height/2; y += gridSize){
+    newBlock.push([]);
+    for(let x = 50; x < width; x += gridSize){
+      // it should be if a word exisit in this place then 1 or 0
+      if(random(100) > 50){
+        newBlock[y].push(1);
+      }
+      else{
+        newBlock[y].push(0);
+      }
+    }
+  }
+}
 
 function updateGrid(){
   for(let y = 50; y < height/2; y += gridSize){
@@ -180,8 +186,11 @@ function guess(){
 function mouseDragged(){
   for(let i = 0; i < letters.length; i++){
     let d = dist(mouseX, mouseY, letters[i], letters[i]);
-    currentWord += letter[i];
+    currentWord += letters[i];
+    fill(0);
   }
+
+  let guess = currentWord;
 }
 
 // the crossword puzzle grid
