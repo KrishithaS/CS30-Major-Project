@@ -18,7 +18,7 @@ let start = false;
 let letters;
 
 let gridSize = 50;
-let newBlock = [];
+let newBlock;
 
 let currentWord = "";
 
@@ -27,7 +27,7 @@ let score = 0;
 let level1Array =[];
 let bonus = [];
 
-let myMap = new map();
+// let map = new map();
 
 function preload(){
   startPage = loadImage("wordscape_start.png");
@@ -39,28 +39,15 @@ function preload(){
   rightChime = loadSound("chime-sound-7143.mp3");
 }
 
-// class Circle{
-//   constructor(x, y, color, radius){
-//     this.x = x;
-//     this.y = y;
-//     this.color = color;
-//     this.radius = radius;
-//   }
-
-//   display(){
-//     fill(this.color);
-//     circle(this.x, this.y, this.radius * 2);
-//   }
-// }
-
 function setup() {
   createCanvas(900, 900);
   image(startPage, 0, 0, width, height);
   angleMode(DEGREES);
+
+  // newBlock = generateGrid();
 }
 
 function draw() {
-  // background(220);
 }
 
 function mousePressed(){
@@ -113,7 +100,6 @@ function level1(){
 
   image(gamePage, 0, 0, 600, height);
 
-  // generateGrid();
   updateGrid();
 
   fill(255, 255, 255, 200);
@@ -132,19 +118,16 @@ function level1(){
     fill(0);
     text(letters[i], x, y);
     i ++;
-
-    // circle(cos(angle) * 150, sin(angle) * 150, 30);
   }
 
 
-  mouseDragged();
-  checkWords();
+  // mouseDragged();
+  // checkWords();
 
   // level2();
 }
 
 // function checkWords(){
-//   let map = new map();
 //   n = 0;
 //   for(let word of allWords){
 //     n = n + 1;
@@ -157,52 +140,60 @@ function level1(){
 //   }
 // }
 
-// function level2(){
-//   letters = [];
-// }
 
-// function generateGrid(){
-//   for(let y = 50; y < height/2; y += gridSize){
-//     newBlock.push([]);
-//     for(let x = 50; x < width; x += gridSize){
-//       if()
-//     }
-//   }
-// }
+function generateGrid(){
+  let newGrid = [];
+  for(let y = 50; y < height/2; y += gridSize){
+    newGrid.push([]);
+    for(let x = 50; x < width; x += gridSize){
+      // it should be if a letter exisit in this place then 1 or 0
+      // let puzzleWords = ["play", "lay", "pay", "lap"];
+      if(random(100) > 50){
+        newGrid[y].push(1);
+      }
+      else{
+        newGrid[y].push(0);
+      }
+    }
+  }
+  return newGrid;
+}
 
 function updateGrid(){
   for(let y = 50; y < height/2; y += gridSize){
     for(let x = 50; x < width; x += gridSize){
-      // noStroke();
-      fill(255, 255, 255, 200);
+      if(newBlock[y][x] === 1){
+        fill(255, 255, 255, 200);
+      }
       square(x, y, gridSize, 5);
     }
   }
 }
 
 
-// function guess(){
+// function guessed(){
 //   for(let words of allWords){
-//     if(guessed === words){
-//       // correct sound
-//       rightChime.play();
-
+//     if(guess === words){
+//       rightChime.play(); // correct sound
 //       // bonus word
 //     }
 //     else{
-//       //incorrect sound
-//       worngBuzz.play();
+//       worngBuzz.play(); //incorrect sound
 //     }
 //   }
 // }
 
 
 
-function mouseDragged(){
-  for(let i = 0; i < letters.length; i++){
-    let d = dist(mouseX, mouseY, letters[i], letters[i]);
-  }
-}
+// function mouseDragged(){
+//   for(let i = 0; i < letters.length; i++){
+//     let d = dist(mouseX, mouseY, letters[i], letters[i]);
+//     currentWord += letters[i];
+//     fill(0);
+//   }
+
+//   let guess = currentWord;
+// }
 
 // the crossword puzzle grid
 // get swiping mechanism working
