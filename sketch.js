@@ -21,6 +21,7 @@ let gridSize = 50;
 let newBlock;
 
 let currentWord = "";
+let puzzleWords;
 
 let score = 0;
 
@@ -96,7 +97,7 @@ function switchPage(){
 
 function level1(){
   letters = ["A", "L", "P", "Y"];
-  let puzzleWords = ["play", "lay", "pay", "lap"];
+  puzzleWords = ["play", "lay", "pay", "lap"];
 
   image(gamePage, 0, 0, 600, height);
 
@@ -147,22 +148,38 @@ function generateGrid(){
     newGrid.push([]);
     for(let x = 50; x < width; x += gridSize){
       // it should be if a letter exisit in this place then 1 or 0
-      // let puzzleWords = ["play", "lay", "pay", "lap"];
-      if(random(100) > 50){
-        newGrid[y].push(1);
-      }
-      else{
-        newGrid[y].push(0);
-      }
+      // puzzleWords = ["play", "lay", "pay", "lap"];
+      newGrid[y].push(1);
     }
   }
   return newGrid;
 }
 
+// but have to pick a random spot
+X = random(50, width)/gridSize;
+Y = random(50, height/2)/gridSize;
+if(grid[y][x] === 1){
+  if(random(100) > 50){
+    //option one go down
+    for(letters in word){
+      grid[y][x] = letters;
+      y += gridSize;
+    }
+  }
+  else{
+    //option two go sideways
+    for(letters in word){
+      grid[y][x] = letters;
+      x += gridSize;
+    }
+  }
+}
+//base inprocess code
+
 function updateGrid(){
   for(let y = 50; y < height/2; y += gridSize){
     for(let x = 50; x < width; x += gridSize){
-      if(newBlock[y][x] === 1){
+      if(newBlock[y][x] !== 1){
         fill(255, 255, 255, 200);
       }
       square(x, y, gridSize, 5);
