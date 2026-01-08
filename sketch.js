@@ -18,7 +18,6 @@ let start = false;
 let letters;
 
 let gridSize = 50;
-let newBlock;
 
 let currentWord = "";
 let puzzleWords;
@@ -44,8 +43,6 @@ function setup() {
   createCanvas(900, 900);
   image(startPage, 0, 0, width, height);
   angleMode(DEGREES);
-
-  // newBlock = generateGrid();
 }
 
 function draw() {
@@ -101,7 +98,11 @@ function level1(){
 
   image(gamePage, 0, 0, 600, height);
 
+  let grid = generateGrid();
+  generatePuzzleGrid(grid);
+
   updateGrid();
+  
 
   fill(255, 255, 255, 200);
   noStroke();
@@ -147,39 +148,46 @@ function generateGrid(){
   for(let y = 50; y < height/2; y += gridSize){
     newGrid.push([]);
     for(let x = 50; x < width; x += gridSize){
-      // it should be if a letter exisit in this place then 1 or 0
-      // puzzleWords = ["play", "lay", "pay", "lap"];
       newGrid[y].push(1);
+      //why the push not working
     }
   }
   return newGrid;
 }
 
-// but have to pick a random spot
-X = random(50, width)/gridSize;
-Y = random(50, height/2)/gridSize;
-if(grid[y][x] === 1){
-  if(random(100) > 50){
-    //option one go down
-    for(letters in word){
-      grid[y][x] = letters;
-      y += gridSize;
+function generatePuzzleGrid(grid){
+  // but have to pick a random spot
+  for(let word of puzzleWords){
+    X = random(50, width)/gridSize;
+    Y = random(50, height/2)/gridSize;
+    if(grid[Y][X] === 1){
+      if(random(100) > 50){
+        //option one go down
+        for(let letters of word){
+          grid[y][x] = letters;
+          fill(255, 255, 255, 200);
+          square(x, y, gridSize, 5);
+          y += gridSize;
+        }
+      }
+      else{
+        //option two go sideways
+        for(let letters of word){
+          grid[y][x] = letters;
+          fill(255, 255, 255, 200);
+          square(x, y, gridSize, 5);
+          x += gridSize;
+        }
+      }
     }
   }
-  else{
-    //option two go sideways
-    for(letters in word){
-      grid[y][x] = letters;
-      x += gridSize;
-    }
-  }
+  //base inprocess code
 }
-//base inprocess code
 
 function updateGrid(){
   for(let y = 50; y < height/2; y += gridSize){
     for(let x = 50; x < width; x += gridSize){
-      if(newBlock[y][x] !== 1){
+      if(grid[y][x] !== 1){
         fill(255, 255, 255, 200);
       }
       square(x, y, gridSize, 5);
