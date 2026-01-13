@@ -99,10 +99,11 @@ function level1(){
   image(gamePage, 0, 0, 600, height);
 
   let grid = generateGrid();
-  generatePuzzleGrid(grid);
 
-  // updateGrid(grid);
-  
+
+  generatePuzzleGrid(grid);
+  updateGrid(grid);
+
 
   fill(255, 255, 255, 200);
   noStroke();
@@ -157,60 +158,81 @@ function generateGrid(){
 
 function generatePuzzleGrid(grid){
   // but have to pick a random spot
-  for(let y = 50; y < height/2; y += gridSize){
-    for(let x = 50; x < width - 50; x += gridSize){
-      if(grid[y][x] === 1){
-        for(let word of puzzleWords){
-          if(random(100) > 50){
-            //option one go down
-            for(let letters of word){
-              grid[y][x] = letters;
 
-              fill(255, 255, 255, 200);
-              square(x, y, gridSize, 5);
+  
 
-              fill(0);
-              textAlign(CENTER, CENTER);
-              textSize(50);
-              text(letters, x, y);
+  // for(let y = 50; y < height/2; y += gridSize){
+  //   for(let x = 50; x < width - 50; x += gridSize){
 
-              y += gridSize;
-            }
-          }
-          else{
-            //option two go sideways
-            for(let letters of word){
-              grid[y][x] = letters;
 
-              fill(255, 255, 255, 200);
-              square(x, y, gridSize, 5);
+  for(let word of puzzleWords){
 
-              fill(0);
-              textAlign(CENTER, CENTER);
-              textSize(50);
-              text(letters, x, y);
+    let y = Math.round(random(50, 450)/gridSize) * gridSize;
+    let x = Math.round(random(50, 550)/gridSize) * gridSize;
 
-              x += gridSize;
-            }
-          }
+    console.log(y);
+    console.log(x);
+    
+    if(grid[y][x] === 1){
+
+      if(random(100) > 25  &&  word.length * 50 <= width - 50 - y){ //option one go down
+        for(let letters of word){
+          grid[y][x] = letters;
+
+          fill(0);
+          textAlign(CENTER, CENTER);
+          textSize(50);
+          text(letters, x, y);
+
+          y += gridSize;
         }
-        break;
+      }
+      else if(random(100) > 50 && word.length * 50 <= height/2 - y){ //option two go sideways
+        
+        for(let letters of word){
+          grid[y][x] = letters;
+
+          fill(0);
+          textAlign(CENTER, CENTER);
+          textSize(50);
+          text(letters, x, y);
+
+          x += gridSize;
+        }
+      }
+      else{
+        for(let letters of word){
+          grid[y][x] = letters;
+
+          fill(0);
+          textAlign(CENTER, CENTER);
+          textSize(50);
+          text(letters, x, y);
+
+          x -= gridSize;
+        }
       }
     }
   }
   //base inprocess code
 }
 
-// function updateGrid(grid){
-//   for(let y = 50; y < height/2; y += gridSize){
-//     for(let x = 50; x < width; x += gridSize){
-//       if(grid[y][x] === 1){
-//         fill(255, 255, 255, 200);
-//       }
-//       square(x, y, gridSize, 5);
-//     }
-//   }
-// }
+function updateGrid(grid){
+  for(let y = 50; y < height/2; y += gridSize){
+    for(let x = 50; x < width; x += gridSize){
+      if(grid[y][x] !== 1){
+        fill(255, 255, 255, 200);
+        square(x, y, gridSize, 5);
+        stroke(0);
+      }
+      else{
+        noFill();
+        noStroke();
+        square(x, y, gridSize, 5);
+      }
+    }
+  }
+}
 
 
 // function guessed(){
