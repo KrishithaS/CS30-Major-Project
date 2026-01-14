@@ -1,9 +1,6 @@
 // Crossword wordscape
 // Krishitha Saravanakumar
 // October 18, 2025
-//
-// Extra for Experts:
-// - describe what you did to take this project "above and beyond"
 
 
 let startPage;
@@ -93,6 +90,8 @@ function switchPage(){
 }
 
 function level1(){
+  // start = false;
+
   letters = ["A", "L", "P", "Y"];
   puzzleWords = ["play", "lay", "pay", "lap"];
 
@@ -175,19 +174,39 @@ function generatePuzzleGrid(grid){
     
     if(grid[y][x] === 1){
 
-      if(random(100) > 25  &&  word.length * 50 <= width - 50 - y){ //option one go down
-        for(let letters of word){
-          grid[y][x] = letters;
+      if(random(100) > 50){
+        if(word.length * 50 <= height/2 - y){ //option one go down
+          for(let letters of word){
+            grid[y][x] = letters;
 
-          fill(0);
-          textAlign(CENTER, CENTER);
-          textSize(50);
-          text(letters, x, y);
+            fill(0);
+            textAlign(CENTER, CENTER);
+            textSize(50);
+            text(letters, x, y);
 
-          y += gridSize;
+            y += gridSize;
+          }
+        }
+
+        else{
+          y = Math.round(random(50, 450)/gridSize) * gridSize;
+          x = Math.round(random(50, 550)/gridSize) * gridSize;
+
+          for(let letters of word){
+            grid[y][x] = letters;
+
+            fill(0);
+            textAlign(CENTER, CENTER);
+            textSize(50);
+            text(letters, x, y);
+
+            y += gridSize;
+          }
         }
       }
-      else if(random(100) > 50 && word.length * 50 <= height/2 - y){ //option two go sideways
+
+      else{
+        if(word.length * 50 <= width - 50 - x){ //option two go sideways
         
         for(let letters of word){
           grid[y][x] = letters;
@@ -200,18 +219,6 @@ function generatePuzzleGrid(grid){
           x += gridSize;
         }
       }
-      else{
-        for(let letters of word){
-          grid[y][x] = letters;
-
-          fill(0);
-          textAlign(CENTER, CENTER);
-          textSize(50);
-          text(letters, x, y);
-
-          x -= gridSize;
-        }
-      }
     }
   }
   //base inprocess code
@@ -221,13 +228,8 @@ function updateGrid(grid){
   for(let y = 50; y < height/2; y += gridSize){
     for(let x = 50; x < width; x += gridSize){
       if(grid[y][x] !== 1){
-        fill(255, 255, 255, 200);
-        square(x, y, gridSize, 5);
+        fill(255, 255, 255, 220);
         stroke(0);
-      }
-      else{
-        noFill();
-        noStroke();
         square(x, y, gridSize, 5);
       }
     }
