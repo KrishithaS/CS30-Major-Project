@@ -6,62 +6,120 @@
 let startPage;
 let homePage;
 let gamePage;
+
 let allWords;
-let wordlist;
-let worngBuzz;
+let wrongBuzz;
 let rightChime;
 
-let start = false;
+let screen = "start";
 let letters;
 
 let gridSize = 50;
-
 let currentWord = "";
 let puzzleWords;
 
 let score = 0;
 
-let level1Array =[];
-let bonus = [];
+let minRow = 1;
+let maxRow = 5;
+let minCol = 3;
+let maxCol = 9;
 
-// let map = new map();
+let mouseStartX
+let mouseStartY;
+let isSwiping = false;
+
+let levelArray =[];
+let highlightedLetters = [];
+// let bonus = [];
+
+let grid;
+
+let wordMap = new map();
 
 function preload(){
   startPage = loadImage("wordscape_start.png");
   homePage = loadImage("home_page.jpg");
   gamePage = loadImage("game_page.jpg");
-  wordlist = "wordlist.10000.txt";
-  allWords = loadStrings(wordlist);
-  worngBuzz = loadSound("incorrect-293358.mp3");
+
+  allWords = loadStrings("wordlist.10000.txt");
+
+  wrongBuzz = loadSound("incorrect-293358.mp3");
   rightChime = loadSound("chime-sound-7143.mp3");
 }
 
 function setup() {
   createCanvas(900, 900);
-  image(startPage, 0, 0, width, height);
   angleMode(DEGREES);
 }
 
 function draw() {
+  if(screen === "start"){
+    image(startPage, 0, 0, width, height);
+  }
+
+  else if(screen === "home"){
+    switchPage();
+  }
+
+  else if(screen === "game"){
+    image(gamePage, 0, 0, width, height);
+
+    if(grid){
+      updateGrid(grid);
+    }
+    drawLetterCircle();
+  }
 }
 
 function mousePressed(){
-  if(start === false){
+  if(screen === "start"){
     if(mouseX <= 750 && mouseX >= 150 && mouseY >= 0 && mouseY <= height){
-      switchPage();
+      screen = "home";
     }
   }
 
-  if(start === true){
+  else if(screen === "home"){
     if(mouseX <= width/2 + 75 && mouseX >= width/2 - 75 && mouseY <= height - 275 && mouseY >= height - 325){
       level1();
     }
+  }
+
+  if(screen === "game"){
+    mouseStartX = mouseX;
+    mouseStartY = mouseY;
+    isSwiping = true;
+  }
+}
+
+function mouseDragged(){
+  if(screen === "game" && isSwiping){
+    fill(0, 255, 0);
+    noStroke();
+    circle(mouseX, mouseY, 60);;
+  }
+}
+function mouseReleased(){
+  if(screen === "game" && isSwiping){
+    let dx = mouseX - mouseStartX;
+    let dy = mouseY - mouseStartY;
+    let minDist = 80;
+
+    for(let i = 0; i < letters.length; i++){
+      let dist = dist(mouseStartX, mouseStartY, mouseX, mouseY);
+      if(dist < minDist){
+        currentWord += letters[i];
+        minDist = dist;
+      }
+    }
+
+    isSwiping = false;
   }
 }
 
 function switchPage(){
   createCanvas(600, 900);
-  image(homePage, 0, 0, 600, height);
+  image(homePage, 0, 0, width, height);
 
   noStroke();
   fill("orange");
@@ -85,35 +143,33 @@ function switchPage(){
   textAlign(CENTER, CENTER);
   textSize(30);
   text("LEVEL 1", width/2, height - height/3);
-
-  start = true;
 }
 
 function level1(){
-  // start = false;
+
+  screen = "game";
 
   letters = ["A", "L", "P", "Y"];
-  puzzleWords = ["play", "lay", "pay", "lap"];
+  puzzleWords = ["PLAY", "LAY", "PAY", "LAP"];
 
-  image(gamePage, 0, 0, 600, height);
-
-  let grid = generateGrid();
-
-
+  grid = generateGrid();
   generatePuzzleGrid(grid);
-  updateGrid(grid);
 
+}
+
+function drawLetterCircle(){
+  push();
+  translate(width/2, height - height/4);
 
   fill(255, 255, 255, 200);
   noStroke();
-  translate(width/2, height - height/4);
   circle(0, 0, 400);
 
   let i = 0;
-
   for(let angle = 0; angle < 360; angle += 360 / 4){
     let x = cos(angle) * 150;
     let y = sin(angle) * 150;
+
     
     textAlign(CENTER, CENTER);
     textSize(50);
@@ -122,33 +178,21 @@ function level1(){
     i ++;
   }
 
-
-  // mouseDragged();
+  pop();
   // checkWords();
 
   // level2();
 }
 
-// function checkWords(){
-//   n = 0;
-//   for(let word of allWords){
-//     n = n + 1;
-//     map.set(word, n);
-//   }
-//   for(let word of puzzleWords){
-//     if(map.has(word)){
-//       return word;
-//     }
-//   }
-// }
-
 
 function generateGrid(){
-
+  let rows = Math.floor((height/2) / gridSize);
+  let cols = Math.floor(width/gridSize);
   let newGrid = [];
-  for(let y = 0; y < height/2; y ++){
+
+  for(let y = 0; y < rows; y ++){
     newGrid.push([]);
-    for(let x = 0; x < width; x ++){
+    for(let x = 0; x < cols; x ++){
       newGrid[y].push(1);
     }
   }
@@ -156,110 +200,60 @@ function generateGrid(){
 }
 
 function generatePuzzleGrid(grid){
-  // but have to pick a random spot
-
-  
-
-  // for(let y = 50; y < height/2; y += gridSize){
-  //   for(let x = 50; x < width - 50; x += gridSize){
-
+  let rows = grid.length;
+  let cols = grid[0].length;
 
   for(let word of puzzleWords){
 
-    let y = Math.round(random(50, 450)/gridSize) * gridSize;
-    let x = Math.round(random(50, 550)/gridSize) * gridSize;
+    let y = Math.floor(random(minRow, maxRow));
+    let x = Math.floor(random(minCol, maxCol));
 
-    console.log(y);
-    console.log(x);
     
     if(grid[y][x] === 1){
 
       if(random(100) > 50){
-        if(word.length * 50 <= height/2 - y){ //option one go down
-          for(let letters of word){
-            grid[y][x] = letters;
-
-            fill(0);
-            textAlign(CENTER, CENTER);
-            textSize(50);
-            text(letters, x, y);
-
-            y += gridSize;
-          }
-        }
-
-        else{
-          y = Math.round(random(50, 450)/gridSize) * gridSize;
-          x = Math.round(random(50, 550)/gridSize) * gridSize;
+        if(y + word.length <= rows){ //option one go down
 
           for(let letters of word){
             grid[y][x] = letters;
-
-            fill(0);
-            textAlign(CENTER, CENTER);
-            textSize(50);
-            text(letters, x, y);
-
-            y += gridSize;
+            y += 1;
           }
         }
       }
 
       else{
-        if(word.length * 50 <= width - 50 - x){ //option two go sideways
-        
-        for(let letters of word){
-          grid[y][x] = letters;
-
-          fill(0);
-          textAlign(CENTER, CENTER);
-          textSize(50);
-          text(letters, x, y);
-
-          x += gridSize;
+        if(word.length * gridSize <= width - 50 - x){ //option two go sideways
+          
+          for(let letters of word){
+            grid[y][x] = letters;
+            x += 1;
+          }
         }
       }
     }
   }
-  //base inprocess code
 }
 
 function updateGrid(grid){
   for(let y = 50; y < height/2; y += gridSize){
     for(let x = 50; x < width; x += gridSize){
-      if(grid[y][x] !== 1){
+
+      let row = y/gridSize;
+      let col = x/gridSize;
+
+      if(grid[row] && grid[row][col] !== 1){
         fill(255, 255, 255, 220);
         stroke(0);
         square(x, y, gridSize, 5);
+
+        fill(0);
+        textAlign(CENTER, CENTER);
+        textSize(30);
+        text(grid[row][col], x, y);
       }
     }
   }
 }
-
-
-// function guessed(){
-//   for(let words of allWords){
-//     if(guess === words){
-//       rightChime.play(); // correct sound
-//       // bonus word
-//     }
-//     else{
-//       worngBuzz.play(); //incorrect sound
-//     }
-//   }
-// }
-
-
-
-// function mouseDragged(){
-//   for(let i = 0; i < letters.length; i++){
-//     let d = dist(mouseX, mouseY, letters[i], letters[i]);
-//     currentWord += letters[i];
-//     fill(0);
-//   }
-
-//   let guess = currentWord;
-// }
 
 // the crossword puzzle grid
 // get swiping mechanism working
