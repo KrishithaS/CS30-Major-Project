@@ -25,7 +25,7 @@ let maxRow = 5;
 let minCol = 3;
 let maxCol = 9;
 
-let mouseStartX
+let mouseStartX;
 let mouseStartY;
 let isSwiping = false;
 
@@ -186,7 +186,7 @@ function drawLetterCircle(){
 
 
 function generateGrid(){
-  let rows = Math.floor((height/2) / gridSize);
+  let rows = Math.floor(height/2 / gridSize);
   let cols = Math.floor(width/gridSize);
   let newGrid = [];
 
