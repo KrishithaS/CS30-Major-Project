@@ -35,7 +35,7 @@ let highlightedLetters = [];
 
 let grid;
 
-let wordMap = new map();
+// let wordMap = new map();
 
 function preload(){
   startPage = loadImage("wordscape_start.png");
@@ -93,12 +93,17 @@ function mousePressed(){
 }
 
 function mouseDragged(){
-  if(screen === "game" && isSwiping){
+  if(mousePressed() && screen === "game" && isSwiping){
     fill(0, 255, 0);
-    noStroke();
     circle(mouseX, mouseY, 60);;
   }
 }
+
+//for the circle 
+// i need the click and drag the letters to create a word
+// i need a circle around the letters when i am clicking and dragging and also want the text color to change
+// i need a line when i am dragging
+
 function mouseReleased(){
   if(screen === "game" && isSwiping){
     let dx = mouseX - mouseStartX;
@@ -106,15 +111,20 @@ function mouseReleased(){
     let minDist = 80;
 
     for(let i = 0; i < letters.length; i++){
-      let dist = dist(mouseStartX, mouseStartY, mouseX, mouseY);
-      if(dist < minDist){
+
+      let distance = dist(mouseStartX, mouseStartY, mouseX, mouseY);
+      // only adding a and is adding a even if i release my mouse from random spot
+      if(distance < minDist){
         currentWord += letters[i];
-        minDist = dist;
+        minDist = distance;
       }
+
     }
 
     isSwiping = false;
   }
+
+  console.log(currentWord);
 }
 
 function switchPage(){
@@ -147,14 +157,13 @@ function switchPage(){
 
 function level1(){
 
-  screen = "game";
-
   letters = ["A", "L", "P", "Y"];
   puzzleWords = ["PLAY", "LAY", "PAY", "LAP"];
 
   grid = generateGrid();
   generatePuzzleGrid(grid);
 
+  screen = "game";
 }
 
 function drawLetterCircle(){
@@ -170,6 +179,10 @@ function drawLetterCircle(){
     let x = cos(angle) * 150;
     let y = sin(angle) * 150;
 
+    if(mousePressed() && mouseX === x && mouseY === y){
+      fill("green");
+      circle(mouseX, mouseY, 50);
+    }
     
     textAlign(CENTER, CENTER);
     textSize(50);
@@ -179,9 +192,6 @@ function drawLetterCircle(){
   }
 
   pop();
-  // checkWords();
-
-  // level2();
 }
 
 
@@ -234,6 +244,14 @@ function generatePuzzleGrid(grid){
   }
 }
 
+//for the grid/crossword puzzle
+// i don't want the words to overlap each other
+// all the words should pop up not just couple words
+// i want it to look like a crossword
+
+//maybe create a word list that looks like how i want the crossword to look like
+//or plug all the letter manually for every word in a specific place on the grid
+
 function updateGrid(grid){
   for(let y = 50; y < height/2; y += gridSize){
     for(let x = 50; x < width; x += gridSize){
@@ -254,6 +272,15 @@ function updateGrid(grid){
     }
   }
 }
+
+//more needed
+// the check if the word is on the grid then the chime sound and the words pop up on it place on the grid
+// the check if the word not on the grid but is a real word then just the chime sound
+// the check if the word not on grid and not a real word according to the list then the wrong buzz
+
+//Additional wanted
+// if it is a word but not on the grid then add it to bonus
+// score for the level
 
 // the crossword puzzle grid
 // get swiping mechanism working
