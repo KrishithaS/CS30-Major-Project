@@ -33,11 +33,17 @@ let levelArray =[];
 let highlightedLetters = [];
 // let bonus = [];
 
+let level1puzzle;
+let level2puzzle;
+
 let grid;
 
 // let wordMap = new map();
 
 function preload(){
+  level1puzzle = loadStrings("level1.txt");
+  level2puzzle = loadStrings("level2.txt");
+
   startPage = loadImage("wordscape_start.png");
   homePage = loadImage("home_page.jpg");
   gamePage = loadImage("game_page.jpg");
@@ -59,7 +65,7 @@ function draw() {
   }
 
   else if(screen === "home"){
-    switchPage();
+    drawHomePage();
   }
 
   else if(screen === "game"){
@@ -90,13 +96,18 @@ function mousePressed(){
     mouseStartY = mouseY;
     isSwiping = true;
   }
+
+  // if(screen === "game" && isSwiping){
+  //   fill("green");
+  //   circle(mouseX, mouseY, 60);
+  // }
 }
 
 function mouseDragged(){
-  if(mousePressed() && screen === "game" && isSwiping){
-    fill(0, 255, 0);
-    circle(mouseX, mouseY, 60);;
-  }
+  // if(screen === "game" && isSwiping){
+  //   fill(0, 255, 0);
+  //   circle(mouseX, mouseY, 60);
+  // }
 }
 
 //for the circle 
@@ -119,6 +130,11 @@ function mouseReleased(){
         minDist = distance;
       }
 
+      // if(screen === "game" && isSwiping){
+      //   fill(0, 255, 0);
+      //   circle(mouseX, mouseY, 60);
+      // }
+
     }
 
     isSwiping = false;
@@ -127,7 +143,7 @@ function mouseReleased(){
   console.log(currentWord);
 }
 
-function switchPage(){
+function drawHomePage(){
   createCanvas(600, 900);
   image(homePage, 0, 0, width, height);
 
@@ -178,15 +194,19 @@ function drawLetterCircle(){
   for(let angle = 0; angle < 360; angle += 360 / 4){
     let x = cos(angle) * 150;
     let y = sin(angle) * 150;
-
-    if(mousePressed() && mouseX === x && mouseY === y){
-      fill("green");
-      circle(mouseX, mouseY, 50);
-    }
     
+    if(mousePressed()){
+      fill("green");
+      circle(mouseX, mouseY, 60);
+      fill("white");
+    }
+
+    else{
+      fill(0);
+    }
+
     textAlign(CENTER, CENTER);
     textSize(50);
-    fill(0);
     text(letters[i], x, y);
     i ++;
   }
