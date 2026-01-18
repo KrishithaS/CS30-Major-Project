@@ -2,58 +2,54 @@
 // Krishitha Saravanakumar
 // October 18, 2025
 
+// Gobal Variables
 
+// Images/screens/pages
 let startPage;
 let homePage;
 let gamePage;
 
+// All words and sounds
 let allWords;
 let wrongBuzz;
 let rightChime;
 
 let screen = "start";
-let letters;
-
-let gridSize = 50;
-let currentWord = "";
 let puzzleWords;
+let grid;
+let gridSize = 50;
+let levelComplete = false;
 
-let score = 0;
-
-let minRow = 1;
-let maxRow = 5;
-let minCol = 3;
-let maxCol = 9;
-
-let mouseStartX;
-let mouseStartY;
-let isSwiping = false;
-
-let levelArray =[];
-let highlightedLetters = [];
+// Letters / letter position
+let letters;
 let letterPositions = [];
 let selectedLetters = [];
-let swipe = [];
+let currentWord = "";
 
+// Reveal word
+let revealed = [];
+let solvedWords = [];
+
+// Level text file for the grid
 let level1puzzle;
-let level2puzzle;
 
-let grid;
+// Swipe
+let isSwiping = false;
 
-let letterMap = new map();
-
-// let wordMap = new map();
 
 function preload(){
+  // Crossword layour
   level1puzzle = loadStrings("level1.txt");
-  level2puzzle = loadStrings("level2.txt");
 
+  // Images
   startPage = loadImage("wordscape_start.png");
   homePage = loadImage("home_page.jpg");
   gamePage = loadImage("game_page.jpg");
 
+  // Allwords file
   allWords = loadStrings("wordlist.10000.txt");
 
+  // Right and Wrong sounds
   wrongBuzz = loadSound("incorrect-293358.mp3");
   rightChime = loadSound("chime-sound-7143.mp3");
 }
@@ -64,33 +60,52 @@ function setup() {
 }
 
 function draw() {
+  // start screen
   if(screen === "start"){
     image(startPage, 0, 0, width, height);
   }
 
+  // home screen
   else if(screen === "home"){
     drawHomePage();
   }
 
+  // game screen
   else if(screen === "game"){
     image(gamePage, 0, 0, width, height);
 
+    // crossword grid
     if(grid){
-      updateGrid(grid);
+      updateGrid();
     }
+
+    // Lines when swiping
+    if(isSwiping && selectedLetters.length > 0){
+      stroke("darkgreen");
+      strokeWeight(10);
+
+      for(let i = 0; i < selectedLetters.length - 1; i++){
+        let one = letterPositions[selectedLetters[i]];
+        let two = letterPositions[selectedLetters[i + 1]];
+        line(one.x, one.y, two.x, two.y);
+      }
+    }
+
+    // Letter wheel
     drawLetterCircle();
   }
 
-  if(isSwiping && selectedLetters.length > 0){
-    stroke("green");
-    strokeWeight(6);
+  // If level complete
+  if(levelComplete === true){
+    fill(0, 0, 0, 180);
+    rect(0, 0, width, height);
 
-    for(let i = 0; i < selectedLetters.length - 1; i++){
-      let one = letterPositions[selectedLetters[i]];
-      let two = letterPositions[selectedLetters[i + 1]];
-      line(one.x, one.y, two.x, two.y);
-    }
+    fill("white");
+    textAlign(CENTER, CENTER);
+    textSize(50);
+    text("LEVEL COMPLETE!", width/2, height/2)
   }
+  
 }
 
 function mousePressed(){
@@ -135,16 +150,14 @@ function mouseDragged(){
   }
 }
 
-//for the circle 
-// i need the click and drag the letters to create a word
-// i need a circle around the letters when i am clicking and dragging and also want the text color to change
-// i need a line when i am dragging
-
 function mouseReleased(){
   if(screen === "game" && isSwiping){
 
     checkWord();
     isSwiping = false;
+
+    selectedLetters = [];
+    currentWord = "";
 
   }
 }
@@ -160,7 +173,7 @@ function drawHomePage(){
   fill(0);
   textAlign(CENTER, CENTER);
   textSize(50);
-  text(score, width/2, height/3);
+  text(0, width/2, height/3);
 
   textSize(20);
   text("BRILLIANCE", width/2, height/3 + 50);
@@ -182,8 +195,7 @@ function level1(){
   letters = ["A", "L", "P", "Y"];
   puzzleWords = ["PLAY", "LAY", "PAY", "LAP"];
 
-  grid = generateGrid();
-  generatePuzzleGrid(grid);
+  generatePuzzleGrid(level1puzzle);
 
   screen = "game";
 }
@@ -193,10 +205,12 @@ function drawLetterCircle(){
   push();
   translate(width/2, height - height/4);
 
+  // Background Circled
   fill(255, 255, 255, 200);
   noStroke();
   circle(0, 0, 400);
 
+  // Letter placement
   let i = 0;
   for(let angle = 0; angle < 360; angle += 360 / 4){
     let x = cos(angle) * 150;
@@ -204,7 +218,10 @@ function drawLetterCircle(){
 
     letterPositions.push({x: width/2 + x, y: height - height/4 + y, letter: letters[i]});
     
-    if(selectedLetters.includes(letters[i])){
+    // Letter highlight
+    if(selectedLetters.includes(i)){
+      fill("lightgreen");
+      circle(x, y, 70);
       fill("white");
     }
     else{
@@ -221,79 +238,104 @@ function drawLetterCircle(){
 }
 
 
-function generateGrid(){
-  let rows = Math.floor(height/2 / gridSize);
-  let cols = Math.floor(width/gridSize);
+function generatePuzzleGrid(level1puzzle){
+  revealed = [];
   let newGrid = [];
 
-  for(let y = 0; y < rows; y ++){
+  // Convert text file into a grid
+  for(let y = 0; y < level1puzzle.length; y ++){
     newGrid.push([]);
-    for(let x = 0; x < cols; x ++){
-      newGrid[y].push(1);
-    }
-  }
-  return newGrid;
-}
+    revealed.push([]);
 
-function generatePuzzleGrid(grid){
-  let rows = grid.length;
-  let cols = grid[0].length;
+    for(let x = 0; x < level1puzzle[y].length; x ++){
+      let place = level1puzzle[y][x];
 
-  for(let word of puzzleWords){
-
-    let y = Math.floor(random(minRow, maxRow));
-    let x = Math.floor(random(minCol, maxCol));
-
-    
-    if(grid[y][x] === 1){
-
-      if(random(100) > 50){
-        if(y + word.length <= rows){ //option one go down
-
-          for(let letters of word){
-            grid[y][x] = letters;
-            y += 1;
-          }
-        }
+      if(place === "."){
+        newGrid[y][x] = "";
+        revealed[y][x] = false;
       }
 
       else{
-        if(word.length * gridSize <= width - 50 - x){ //option two go sideways
-          
-          for(let letters of word){
-            grid[y][x] = letters;
-            x += 1;
-          }
+        newGrid[y][x] = place;
+        revealed[y][x] = false;
+      }
+    }
+  }
+  grid = newGrid;
+}
+
+
+function updateGrid(){
+  noFill();
+  textAlign(CENTER, CENTER);
+  textSize(30);
+  rectMode(CORNER);
+
+  for(let y = 0; y < grid.length; y ++){
+    for(let x = 0; x < grid[y].length; x ++){
+
+      if(grid[y][x] !== ""){
+
+        let Y = y * gridSize;
+        let X = x * gridSize;
+
+        // Draw squares
+        fill(255, 255, 255, 220);
+        stroke(0);
+        strokeWeight(1);
+        rect(X, Y, gridSize, gridSize, 5);
+
+        // show letters if revealed
+        fill(0);
+        if(revealed[y][x]){
+          text(grid[y][x], X + gridSize/2, Y + gridSize/2);
         }
       }
     }
   }
 }
 
-//for the grid/crossword puzzle
-// i don't want the words to overlap each other
-// all the words should pop up not just couple words
-// i want it to look like a crossword
+function revealGuessedWord(word){
+  for(let y = 0; y < grid.length; y ++){
+    for(let x = 0; x < grid[y].length; x ++){
 
-//maybe create a word list that looks like how i want the crossword to look like
-//or plug all the letter manually for every word in a specific place on the grid
+      let guess = true; // right
+      for(let i = 0; i < word.length; i++){
+        if(grid[y][x + i] !== word[i]){
+          guess = false;
+        }
+      }
 
-function updateGrid(grid){
-  for(let y = 50; y < height/2; y += gridSize){
-    for(let x = 50; x < width; x += gridSize){
+      if(guess === true){
+        for(let i = 0; i < word.length; i++){
+          revealed[y][x + i] = true;
+        }
+      }
 
-      let row = y/gridSize;
-      let col = x/gridSize;
+      guess = true; // down
+      for(let i = 0; i < word.length; i++){
+        if(!grid[y + i] || grid[y + i][x] !== word[i]){
+          guess = false;
+        }
+      }
 
-      if(grid[row] && grid[row][col] !== 1){
-        fill(255, 255, 255, 220);
-        stroke(0);
-        square(x, y, gridSize, 5);
+      if(guess === true){
+        for(let i = 0; i < word.length; i++){
+          revealed[y + i][x] = true;
+        }
+      }
 
-        fill(0);
-        textAlign(CENTER, CENTER);
-        textSize(30);
-        text(grid[row][col], x, y);
+      guess = true; // up
+      for(let i = 0; i < word.length; i++){
+        if(!grid[y - i] || grid[y - i][x] !== word[i]){
+          guess = false;
+        }
+      }
+
+      if(guess === true){
+        for(let i = 0; i < word.length; i++){
+          revealed[y - i][x] = true;
+        }
       }
     }
   }
@@ -316,30 +358,27 @@ function checkWord(){
     }
   }
 
+  // Word is right
   if(onGrid === true){
+    if(!solvedWords.includes(word)){ // .includes() is (if the array has "word") instead of using map(map.has))
+      solvedWords.push(word);
+    }
+
+    revealGuessedWord(word);
     rightChime.play();
+
+    // Check if level complete
+    if(solvedWords.length === puzzleWords.length){
+      levelComplete = true;
+    }
   }
 
   else if(inAllWords === true){
     rightChime.play();
   }
 
+  // word is worng
   else{
     wrongBuzz.play();
   }
 }
-
-//more needed
-// the check if the word is on the grid then the chime sound and the words pop up on it place on the grid
-// the check if the word not on the grid but is a real word then just the chime sound
-// the check if the word not on grid and not a real word according to the list then the wrong buzz
-
-//Additional wanted
-// if it is a word but not on the grid then add it to bonus
-// score for the level
-
-// the crossword puzzle grid
-// get swiping mechanism working
-// check if right or wrong
-// switch levels
-// score
