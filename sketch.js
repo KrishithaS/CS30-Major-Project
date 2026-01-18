@@ -31,12 +31,16 @@ let isSwiping = false;
 
 let levelArray =[];
 let highlightedLetters = [];
-// let bonus = [];
+let letterPositions = [];
+let selectedLetters = [];
+let swipe = [];
 
 let level1puzzle;
 let level2puzzle;
 
 let grid;
+
+let letterMap = new map();
 
 // let wordMap = new map();
 
@@ -76,6 +80,17 @@ function draw() {
     }
     drawLetterCircle();
   }
+
+  if(isSwiping && selectedLetters.length > 0){
+    stroke("green");
+    strokeWeight(6);
+
+    for(let i = 0; i < selectedLetters.length - 1; i++){
+      let one = letterPositions[selectedLetters[i]];
+      let two = letterPositions[selectedLetters[i + 1]];
+      line(one.x, one.y, two.x, two.y);
+    }
+  }
 }
 
 function mousePressed(){
@@ -92,22 +107,32 @@ function mousePressed(){
   }
 
   if(screen === "game"){
-    mouseStartX = mouseX;
-    mouseStartY = mouseY;
+    selectedLetters = [];
+    currentWord = "";
     isSwiping = true;
   }
 
-  // if(screen === "game" && isSwiping){
-  //   fill("green");
-  //   circle(mouseX, mouseY, 60);
-  // }
+  if(screen === "game" && isSwiping){
+    fill("green");
+    circle(mouseX, mouseY, 60);
+  }
 }
 
 function mouseDragged(){
-  // if(screen === "game" && isSwiping){
-  //   fill(0, 255, 0);
-  //   circle(mouseX, mouseY, 60);
-  // }
+  if(screen === "game" && isSwiping){
+
+    highlightedLetters = [];
+
+    for(let i = 0; i < letterPositions.length; i++){
+      let pos = letterPositions[i];
+      let d = dist(mouseX, mouseY, pos.x, pos.y);
+
+      if(d < 50 && !selectedLetters.includes(i)){
+        selectedLetters.push(i);
+        currentWord += pos.letter;
+      }
+    }
+  }
 }
 
 //for the circle 
@@ -117,30 +142,11 @@ function mouseDragged(){
 
 function mouseReleased(){
   if(screen === "game" && isSwiping){
-    let dx = mouseX - mouseStartX;
-    let dy = mouseY - mouseStartY;
-    let minDist = 80;
 
-    for(let i = 0; i < letters.length; i++){
-
-      let distance = dist(mouseStartX, mouseStartY, mouseX, mouseY);
-      // only adding a and is adding a even if i release my mouse from random spot
-      if(distance < minDist){
-        currentWord += letters[i];
-        minDist = distance;
-      }
-
-      // if(screen === "game" && isSwiping){
-      //   fill(0, 255, 0);
-      //   circle(mouseX, mouseY, 60);
-      // }
-
-    }
-
+    checkWord();
     isSwiping = false;
-  }
 
-  console.log(currentWord);
+  }
 }
 
 function drawHomePage(){
@@ -183,6 +189,7 @@ function level1(){
 }
 
 function drawLetterCircle(){
+  letterPositions = [];
   push();
   translate(width/2, height - height/4);
 
@@ -194,13 +201,12 @@ function drawLetterCircle(){
   for(let angle = 0; angle < 360; angle += 360 / 4){
     let x = cos(angle) * 150;
     let y = sin(angle) * 150;
+
+    letterPositions.push({x: width/2 + x, y: height - height/4 + y, letter: letters[i]});
     
-    if(mousePressed()){
-      fill("green");
-      circle(mouseX, mouseY, 60);
+    if(selectedLetters.includes(letters[i])){
       fill("white");
     }
-
     else{
       fill(0);
     }
@@ -290,6 +296,36 @@ function updateGrid(grid){
         text(grid[row][col], x, y);
       }
     }
+  }
+}
+
+function checkWord(){
+  let word = currentWord;
+
+  let onGrid = false;
+  for(let i = 0; i < puzzleWords.length; i++){
+    if(word === puzzleWords[i]){
+      onGrid = true;
+    }
+  }
+
+  let inAllWords = false;
+  for(let i = 0; i < allWords.length; i++){
+    if(word === allWords[i]){
+      inAllWords = true;
+    }
+  }
+
+  if(onGrid === true){
+    rightChime.play();
+  }
+
+  else if(inAllWords === true){
+    rightChime.play();
+  }
+
+  else{
+    wrongBuzz.play();
   }
 }
 
