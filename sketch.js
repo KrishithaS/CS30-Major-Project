@@ -103,7 +103,7 @@ function draw() {
     fill("white");
     textAlign(CENTER, CENTER);
     textSize(50);
-    text("LEVEL COMPLETE!", width/2, height/2)
+    text("LEVEL COMPLETE!", width/2, height/2);
   }
   
 }
@@ -152,13 +152,11 @@ function mouseDragged(){
 
 function mouseReleased(){
   if(screen === "game" && isSwiping){
-
     checkWord();
     isSwiping = false;
 
     selectedLetters = [];
     currentWord = "";
-
   }
 }
 
