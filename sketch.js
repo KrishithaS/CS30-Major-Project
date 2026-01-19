@@ -36,6 +36,8 @@ let level1puzzle;
 // Swipe
 let isSwiping = false;
 
+let score = 0;
+
 
 function preload(){
   // Crossword layour
@@ -171,7 +173,7 @@ function drawHomePage(){
   fill(0);
   textAlign(CENTER, CENTER);
   textSize(50);
-  text(0, width/2, height/3);
+  text(score, width/2, height/3);
 
   textSize(20);
   text("BRILLIANCE", width/2, height/3 + 50);
@@ -190,8 +192,8 @@ function drawHomePage(){
 
 function level1(){
 
-  letters = ["A", "L", "P", "Y"];
-  puzzleWords = ["PLAY", "LAY", "PAY", "LAP"];
+  letters = ["A", "L", "P", "Y"]; //letter for this level
+  puzzleWords = ["PLAY", "LAY", "PAY", "LAP"]; //words formed for the letter for this level
 
   generatePuzzleGrid(level1puzzle);
 
@@ -364,6 +366,7 @@ function checkWord(){
 
     revealGuessedWord(word);
     rightChime.play();
+    score += 20;
 
     // Check if level complete
     if(solvedWords.length === puzzleWords.length){
